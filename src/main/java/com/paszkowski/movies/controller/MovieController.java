@@ -2,9 +2,11 @@ package com.paszkowski.movies.controller;
 
 import com.paszkowski.movies.model.Movie;
 import com.paszkowski.movies.service.MovieService;
+import com.paszkowski.movies.utils.InsertMovies;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,14 @@ public class MovieController {
 
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
+    }
+    @Autowired
+    private InsertMovies insertMovies;
+
+    @PostMapping("/populate")
+    public String populateMovies() {
+        insertMovies.populate();
+        return "Movies have been populated!";
     }
     @GetMapping
     @ApiOperation(value = "Get all movies", response = List.class)
