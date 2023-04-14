@@ -3,9 +3,9 @@ package com.paszkowski.movies.service;
 import com.paszkowski.movies.exceptions.AlreadyExistsException;
 import com.paszkowski.movies.model.Movie;
 import com.paszkowski.movies.repository.MovieRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class MovieService implements IMovieService {
@@ -17,8 +17,8 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<Movie> getAllMovies() {
-        return movieRepository.findAll();
+    public Page<Movie> getAllMovies(Pageable pageable) {
+        return movieRepository.findAll(pageable);
     }
 
     @Override
@@ -55,8 +55,8 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<Movie> searchMovies(String phrase) {
-        return movieRepository.findByTitleContainingIgnoreCase(phrase);
+    public Page<Movie> searchMovies(String phrase, Pageable pageable) {
+        return movieRepository.findByTitleContainingIgnoreCase(phrase, pageable);
     }
 
     @Override
@@ -70,8 +70,8 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<Movie> filterMoviesByCategory(String category) {
-        return movieRepository.findByCategory(category);
+    public Page<Movie> filterMoviesByCategory(String category, Pageable pageable) {
+        return movieRepository.findByCategory(category, pageable);
     }
 
     private boolean isInvalidGrade(int rating) {

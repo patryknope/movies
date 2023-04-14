@@ -16,6 +16,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.paszkowski.movies.model.Movie;
 import com.paszkowski.movies.repository.MovieRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 class MovieServiceTest {
@@ -66,13 +70,14 @@ class MovieServiceTest {
                 new Movie(1L, "Matrix 1", 2020, "ACTION", "Description 1", 5),
                 new Movie(2L, "Matrix 2", 2019, "COMEDY", "Description 2", 4)
         );
-        when(movieRepository.findAll()).thenReturn(expectedMovies);
+        Page<Movie> expectedPage = new PageImpl<>(expectedMovies);
+        when(movieRepository.findAll(any(Pageable.class))).thenReturn(expectedPage);
 
         // when
-        List<Movie> actualMovies = movieService.getAllMovies();
+        Page<Movie> actualPage = movieService.getAllMovies(PageRequest.of(0, 10));
 
         // then
-        assertEquals(expectedMovies, actualMovies);
+        assertEquals(expectedPage, actualPage);
     }
 
     @Test
@@ -156,10 +161,13 @@ class MovieServiceTest {
                 new Movie(1L, "Matrix 1", 2020, "ACTION", "Description 1", 5),
                 new Movie(2L, "Matrix 2", 2019, "COMEDY", "Description 2", 4)
         );
-        when(movieRepository.findByTitleContainingIgnoreCase(phrase)).thenReturn(expectedMovies);
+        Page<Movie> expectedPage = new PageImpl<>(expectedMovies);
+        Pageable pageable = PageRequest.of(0, 10);
+        when(movieRepository.findByTitleContainingIgnoreCase(phrase, pageable)).thenReturn(expectedPage);
 
         // when
-        List<Movie> actualMovies = movieService.searchMovies(phrase);
+        Page<Movie> actualPage = movieService.searchMovies(phrase, pageable);
+        List<Movie> actualMovies = actualPage.getContent();
 
         // then
         assertEquals(expectedMovies, actualMovies);
@@ -185,14 +193,15 @@ class MovieServiceTest {
     void filterMoviesByCategory_shouldReturnFilteredMovies() {
         // given
         String category = "ACTION";
-        List<Movie> expectedMovies = Arrays.asList(
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<Movie> expectedMovies = new PageImpl<>(Arrays.asList(
                 new Movie(1L, "Matrix 1", 2020, category, "Description 1", 5),
                 new Movie(2L, "Matrix 2", 2019, category, "Description 2", 4)
-        );
-        when(movieRepository.findByCategory(category)).thenReturn(expectedMovies);
+        ));
+        when(movieRepository.findByCategory(eq(category), any(PageRequest.class))).thenReturn(expectedMovies);
 
         // when
-        List<Movie> actualMovies = movieService.filterMoviesByCategory(category);
+        Page<Movie> actualMovies = movieService.filterMoviesByCategory(category, pageRequest);
 
         // then
         assertEquals(expectedMovies, actualMovies);
