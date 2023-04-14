@@ -23,7 +23,7 @@ public class Movie {
     private Long id;
     private String title;
     private int year;
-    private Category category;
+    private String category;
     private String description;
     @Min(1) @Max(5)
     private int grade;

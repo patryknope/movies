@@ -1,6 +1,5 @@
 package com.paszkowski.movies.service;
 
-import com.paszkowski.movies.model.Category;
 import com.paszkowski.movies.model.Movie;
 
 import java.util.List;
@@ -13,6 +12,6 @@ public interface IMovieService {
     void deleteMovie(Long id);
     List<Movie> searchMovies(String phrase);
     Movie rateMovie(Long id, int rating);
-    List<Movie> filterMoviesByCategory(Category category);
+    List<Movie> filterMoviesByCategory(String category);
 
 }

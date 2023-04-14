@@ -14,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.paszkowski.movies.model.Category;
 import com.paszkowski.movies.model.Movie;
 import com.paszkowski.movies.repository.MovieRepository;
 
@@ -30,8 +29,8 @@ class MovieServiceTest {
     @Test
     void addMovie_shouldReturnSavedMovie() {
         // given
-        Movie movieToAdd = new Movie(null, "Movie 1", 2020, Category.ACTION, "Description 1", 5);
-        Movie expectedMovie = new Movie(1L, "Movie 1", 2020, Category.ACTION, "Description 1", 5);
+        Movie movieToAdd = new Movie(null, "Movie 1", 2020, "ACTION", "Description 1", 5);
+        Movie expectedMovie = new Movie(1L, "Movie 1", 2020, "ACTION", "Description 1", 5);
         when(movieRepository.save(movieToAdd)).thenReturn(expectedMovie);
 
         // when
@@ -43,26 +42,18 @@ class MovieServiceTest {
     @Test
     public void givenExistingMovie_whenAddMovie_thenThrowAlreadyExistsException() {
         //given
-        Movie movie = new Movie(1L, "Matrix", 2020, Category.COMEDY, "Description", 3);
+        Movie movie = new Movie(1L, "Matrix", 2020, "COMEDY", "Description", 3);
         when(movieRepository.existsByTitle(movie.getTitle())).thenReturn(true);
 
         //then
         assertThrows(AlreadyExistsException.class, () -> movieService.addMovie(movie));
         verify(movieRepository, times(0)).save(movie);
     }
-    @Test
-    void whenAddMovieWithInvalidCategory_thenThrowIllegalArgumentException() {
-        //given
-        Movie movieWithInvalidCategory = new Movie(null, "Matrix", 2020, null, "Test Description", 3);
-
-        //then
-        assertThrows(IllegalArgumentException.class, () -> movieService.addMovie(movieWithInvalidCategory));
-    }
 
     @Test
     void whenAddMovieWithInvalidGrade_thenThrowIllegalArgumentException() {
         //given
-        Movie movieWithInvalidGrade = new Movie(null, "Matrix", 2020, Category.ACTION, "Test Description", 0);
+        Movie movieWithInvalidGrade = new Movie(null, "Matrix", 2020, "ACTION", "Test Description", 0);
 
         //then
         assertThrows(IllegalArgumentException.class, () -> movieService.addMovie(movieWithInvalidGrade));
@@ -72,8 +63,8 @@ class MovieServiceTest {
     void getAllMovies_shouldReturnAllMovies() {
         // given
         List<Movie> expectedMovies = Arrays.asList(
-                new Movie(1L, "Matrix 1", 2020, Category.ACTION, "Description 1", 5),
-                new Movie(2L, "Matrix 2", 2019, Category.COMEDY, "Description 2", 4)
+                new Movie(1L, "Matrix 1", 2020, "ACTION", "Description 1", 5),
+                new Movie(2L, "Matrix 2", 2019, "COMEDY", "Description 2", 4)
         );
         when(movieRepository.findAll()).thenReturn(expectedMovies);
 
@@ -88,7 +79,7 @@ class MovieServiceTest {
     void getMovieById_shouldReturnMovie() {
         // given
         long movieId = 1L;
-        Movie expectedMovie = new Movie(movieId, "Matrix", 2020, Category.ACTION, "Description 1", 5);
+        Movie expectedMovie = new Movie(movieId, "Matrix", 2020, "ACTION", "Description 1", 5);
         when(movieRepository.findById(movieId)).thenReturn(Optional.of(expectedMovie));
 
         // when
@@ -114,8 +105,8 @@ class MovieServiceTest {
     void editMovie_shouldReturnEditedMovie() {
         // given
         long movieId = 1L;
-        Movie movieToEdit = new Movie(movieId, "New Matrix", 2022, Category.DRAMA, "New Description", 4);
-        Movie existingMovie = new Movie(movieId, "Old Matrix", 2020, Category.ACTION, "Old Description", 5);
+        Movie movieToEdit = new Movie(movieId, "New Matrix", 2022, "DRAMA", "New Description", 4);
+        Movie existingMovie = new Movie(movieId, "Old Matrix", 2020, "ACTION", "Old Description", 5);
         when(movieRepository.findById(movieId)).thenReturn(Optional.of(existingMovie));
         when(movieRepository.save(existingMovie)).thenReturn(movieToEdit);
 
@@ -125,7 +116,7 @@ class MovieServiceTest {
         // then
         assertEquals("New Matrix", actualMovie.getTitle());
         assertEquals(2022, actualMovie.getYear());
-        assertEquals(Category.DRAMA, actualMovie.getCategory());
+        assertEquals("DRAMA", actualMovie.getCategory());
         assertEquals("New Description", actualMovie.getDescription());
         assertEquals(4, actualMovie.getGrade());
     }
@@ -134,7 +125,7 @@ class MovieServiceTest {
     public void deleteMovie_validId_movieDeleted() {
         // given
         long movieId = 1L;
-        Movie movie = new Movie(movieId, "Matrix", 2020, Category.ACTION, "Description", 0);
+        Movie movie = new Movie(movieId, "Matrix", 2020, "ACTION", "Description", 0);
         movieRepository.save(movie);
 
 
@@ -162,8 +153,8 @@ class MovieServiceTest {
         // given
         String phrase = "Matrix";
         List<Movie> expectedMovies = Arrays.asList(
-                new Movie(1L, "Matrix 1", 2020, Category.ACTION, "Description 1", 5),
-                new Movie(2L, "Matrix 2", 2019, Category.COMEDY, "Description 2", 4)
+                new Movie(1L, "Matrix 1", 2020, "ACTION", "Description 1", 5),
+                new Movie(2L, "Matrix 2", 2019, "COMEDY", "Description 2", 4)
         );
         when(movieRepository.findByTitleContainingIgnoreCase(phrase)).thenReturn(expectedMovies);
 
@@ -179,7 +170,7 @@ class MovieServiceTest {
         // given
         long movieId = 1L;
         int rating = 4;
-        Movie movieToRate = new Movie(movieId, "Matrix 1", 2020, Category.ACTION, "Description 1", 5);
+        Movie movieToRate = new Movie(movieId, "Matrix 1", 2020, "ACTION", "Description 1", 5);
         when(movieRepository.findById(movieId)).thenReturn(Optional.of(movieToRate));
         when(movieRepository.save(movieToRate)).thenReturn(movieToRate);
 
@@ -193,7 +184,7 @@ class MovieServiceTest {
     @Test
     void filterMoviesByCategory_shouldReturnFilteredMovies() {
         // given
-        Category category = Category.ACTION;
+        String category = "ACTION";
         List<Movie> expectedMovies = Arrays.asList(
                 new Movie(1L, "Matrix 1", 2020, category, "Description 1", 5),
                 new Movie(2L, "Matrix 2", 2019, category, "Description 2", 4)

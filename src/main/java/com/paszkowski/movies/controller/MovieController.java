@@ -1,6 +1,5 @@
 package com.paszkowski.movies.controller;
 
-import com.paszkowski.movies.model.Category;
 import com.paszkowski.movies.model.Movie;
 import com.paszkowski.movies.service.MovieService;
 import io.swagger.annotations.Api;
@@ -15,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/movies")
 @Api(value = "Movie management system")
+@CrossOrigin(origins = "http://localhost:3000")
 public class MovieController {
 
     private final MovieService movieService;
@@ -63,7 +63,7 @@ public class MovieController {
 
     @GetMapping("/categories/{category}")
     @ApiOperation(value = "Filter movies by category", response = List.class)
-    public ResponseEntity<List<Movie>> filterMoviesByCategory(@PathVariable @ApiParam(value = "Category of the movie", required = true) Category category) {
+    public ResponseEntity<List<Movie>> filterMoviesByCategory(@PathVariable @ApiParam(value = "Category of the movie", required = true) String category) {
         return ResponseEntity.ok(movieService.filterMoviesByCategory(category));
     }
 }
