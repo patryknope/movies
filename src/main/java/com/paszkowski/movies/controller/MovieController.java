@@ -35,13 +35,11 @@ public class MovieController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "title") String sort,
-            @RequestParam(defaultValue = "asc") String direction
-    ) {
+            @RequestParam(defaultValue = "asc") String direction) {
         PageRequest pageRequest = PageRequest.of(
                 page, size,
                 direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
-                sort
-        );
+                sort);
         return ResponseEntity.ok(movieService.getAllMovies(pageRequest));
     }
 
@@ -52,8 +50,7 @@ public class MovieController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "title") String sort,
-            @RequestParam(defaultValue = "asc") String direction
-    ) {
+            @RequestParam(defaultValue = "asc") String direction) {
         PageRequest pageRequest = PageRequest.of(
                 page, size,
                 direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
@@ -72,8 +69,7 @@ public class MovieController {
     @GetMapping("/{id}")
     @ApiOperation(value = "Get a movie by id", response = Movie.class)
     public ResponseEntity<Movie> getMovieById(
-            @PathVariable @ApiParam(value = "Id of the movie", required = true) Long id
-    ) {
+            @PathVariable @ApiParam(value = "Id of the movie", required = true) Long id) {
         return ResponseEntity.ok(movieService.getMovieById(id));
     }
 
@@ -87,17 +83,21 @@ public class MovieController {
     @ApiOperation(value = "Update a movie", response = Movie.class)
     public ResponseEntity<Movie> updateMovie(
             @PathVariable @ApiParam(value = "Movie Id to update movie object", required = true) Long id,
-            @Valid @RequestBody Movie movie
-    ) {
+            @Valid @RequestBody Movie movie) {
         return ResponseEntity.ok(movieService.editMovie(id, movie));
     }
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete a movie")
     public ResponseEntity<Void> deleteMovie(
-            @PathVariable @ApiParam(value = "Movie Id to delete movie object", required = true) Long id
-    ) {
+            @PathVariable @ApiParam(value = "Movie Id to delete movie object", required = true) Long id) {
         movieService.deleteMovie(id);
+        return ResponseEntity.ok().build();
+    }
+    @DeleteMapping
+    @ApiOperation(value = "Delete all movies")
+    public ResponseEntity<Void> deleteAllMovies() {
+        movieService.deleteAllMovies();
         return ResponseEntity.ok().build();
     }
     @GetMapping("/search")
@@ -107,13 +107,11 @@ public class MovieController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "title") String sort,
-            @RequestParam(defaultValue = "asc") String direction
-    ) {
+            @RequestParam(defaultValue = "asc") String direction) {
         PageRequest pageRequest = PageRequest.of(
                 page, size,
                 direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
-                sort
-        );
+                sort);
         return ResponseEntity.ok(movieService.searchMovies(phrase, pageRequest));
     }
 
