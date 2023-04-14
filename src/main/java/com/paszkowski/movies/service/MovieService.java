@@ -55,6 +55,11 @@ public class MovieService implements IMovieService {
     }
 
     @Override
+    public void deleteAllMovies() {
+        movieRepository.deleteAll();
+    }
+
+    @Override
     public Page<Movie> searchMovies(String phrase, Pageable pageable) {
         return movieRepository.findByTitleContainingIgnoreCase(phrase, pageable);
     }
