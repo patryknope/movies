@@ -1,19 +1,10 @@
 package com.paszkowski.movies.utils;
 
-import com.paszkowski.movies.model.Movie;
-import com.paszkowski.movies.repository.MovieRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 import groovy.sql.Sql;
 import java.sql.*;

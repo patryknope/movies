@@ -14,10 +14,8 @@ public interface MovieRepository extends PagingAndSortingRepository<Movie, Long>
 
     Page<Movie> findAll(Pageable pageable);
 
-    List<Movie> findByTitleContainingIgnoreCase(String phrase);
     Page<Movie> findByTitleContainingIgnoreCase(String phrase, Pageable pageable);
 
-    List<Movie> findByCategory(String category);
     Page<Movie> findByCategory(String category, Pageable pageable);
     boolean existsByTitle(String title);
 }
