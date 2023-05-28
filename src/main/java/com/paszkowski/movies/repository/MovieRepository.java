@@ -18,4 +18,6 @@ public interface MovieRepository extends PagingAndSortingRepository<Movie, Long>
 
     Page<Movie> findByCategory(String category, Pageable pageable);
     boolean existsByTitle(String title);
+
+    Page<Movie> findByUser(String email, Pageable pageable);
 }

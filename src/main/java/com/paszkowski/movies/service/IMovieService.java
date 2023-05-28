@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface IMovieService {
     Page<Movie> getAllMovies(Pageable pageable);
+    Page<Movie> getAllMoviesByUser(String email, Pageable pageable);
     Movie getMovieById(Long id);
     Movie addMovie(Movie movie);
     Movie editMovie(Long id, Movie movie);

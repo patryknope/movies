@@ -79,6 +79,11 @@ public class MovieService implements IMovieService {
         return movieRepository.findByCategory(category, pageable);
     }
 
+    @Override
+    public Page<Movie> getAllMoviesByUser(String email, Pageable pageable) {
+        return movieRepository.findByUser(email, pageable);
+    }
+
     private boolean isInvalidGrade(int rating) {
         return rating < 1 || rating > 5;
     }

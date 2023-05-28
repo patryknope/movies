@@ -27,14 +27,14 @@ public class Movie {
     private String description;
     @Min(1) @Max(5)
     private int grade;
-    private String owner;
+    private String user;
 
-    public Movie(String title, int year, String category, String description, int grade, String owner) {
+    public Movie(String title, int year, String category, String description, int grade, String user) {
         this.title = title;
         this.year = year;
         this.category = category;
         this.description = description;
         this.grade = grade;
-        this.owner = owner;
+        this.user = user;
     }
 }

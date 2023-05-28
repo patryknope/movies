@@ -31,6 +31,7 @@ public class MovieController {
     @GetMapping
     @ApiOperation(value = "Get all movies", response = Page.class)
     public ResponseEntity<Page<Movie>> getAllMovies(
+            @RequestParam(defaultValue = "") String email,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "title") String sort,
@@ -39,7 +40,7 @@ public class MovieController {
                 page, size,
                 direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
                 sort);
-        return ResponseEntity.ok(movieService.getAllMovies(pageRequest));
+        return ResponseEntity.ok(movieService.getAllMoviesByUser(email, pageRequest));
     }
 
     @GetMapping("/categories/{category}")
