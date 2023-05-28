@@ -13,7 +13,7 @@ public class InsertMovies {
 
     public void populate() {
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/moviesdb?useSSL=false&serverTimezone=UTC", "root", "password");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/moviesdb?useSSL=false&serverTimezone=UTC", "root", "");
             Sql sql = new Sql(conn);
 
             String createTableQuery = "CREATE TABLE IF NOT EXISTS movies (id INT AUTO_INCREMENT PRIMARY KEY, title VARCHAR(255), year INT, category VARCHAR(255), description TEXT, grade INT CHECK (grade >= 1 AND grade <= 5))";
