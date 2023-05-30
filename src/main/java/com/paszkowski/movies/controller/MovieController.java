@@ -1,5 +1,6 @@
 package com.paszkowski.movies.controller;
 
+import java.util.*;
 import com.paszkowski.movies.model.Movie;
 import com.paszkowski.movies.service.MovieService;
 import com.paszkowski.movies.utils.InsertMovies;
@@ -31,6 +32,21 @@ public class MovieController {
     @GetMapping
     @ApiOperation(value = "Get all movies", response = Page.class)
     public ResponseEntity<Page<Movie>> getAllMovies(
+            @RequestParam(defaultValue = "") String email,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "title") String sort,
+            @RequestParam(defaultValue = "asc") String direction) {
+        PageRequest pageRequest = PageRequest.of(
+                page, size,
+                direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
+                sort);
+        return ResponseEntity.ok(movieService.getAllMovies(pageRequest));
+    }
+
+    @GetMapping("/myvideos")
+    @ApiOperation(value = "Get user all movies", response = Page.class)
+    public ResponseEntity<Page<Movie>> getAlIUserMovies(
             @RequestParam(defaultValue = "") String email,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -85,6 +101,12 @@ public class MovieController {
             @PathVariable @ApiParam(value = "Movie Id to update movie object", required = true) Long id,
             @Valid @RequestBody Movie movie) {
         return ResponseEntity.ok(movieService.editMovie(id, movie));
+    }
+
+    @PostMapping("/gradeset")
+    @ApiOperation(value = "Set grade", response = Movie.class)
+    public ResponseEntity<Movie> setGrade(@RequestBody Map<String, Object> payLoad) {
+        return ResponseEntity.ok(movieService.rateMovie(((Number) payLoad.get("id")).longValue(), (int) payLoad.get("grade")));
     }
 
     @DeleteMapping("/{id}")

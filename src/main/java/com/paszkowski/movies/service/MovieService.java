@@ -66,6 +66,8 @@ public class MovieService implements IMovieService {
 
     @Override
     public Movie rateMovie(Long id, int grade) {
+
+        System.out.println("hahahha "+ grade);
         if (isInvalidGrade(grade)) {
             throw new IllegalArgumentException("Movies can be rated from 1 to 5.");
         }
